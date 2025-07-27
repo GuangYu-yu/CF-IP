@@ -38,7 +38,7 @@ def run_masscan(cidr_list, output_file):
         return False
     
     # 构建masscan命令，添加sudo
-    cmd = ["sudo", "masscan", "-p80,443,2053,2083,2087,2096,8443"] + cidr_list + ["-oL", output_file, "--rate", "60000"]
+    cmd = ["sudo", "masscan", "-p80,443,2053,8443"] + cidr_list + ["-oL", output_file, "--rate", "100000"]
     
     try:
         print("开始运行masscan...")
@@ -95,7 +95,7 @@ def run_cloudflarest_rust(cfst_path, output_csv):
     """运行CloudflareST-Rust测试"""
     try:
         # 构建命令
-        cmd = [cfst_path, "-f", "ip_port_list.txt", "-httping", "-dd", "-sp", "-o", output_csv]
+        cmd = [cfst_path, "-f", os.path.abspath("ip_port_list.txt"), "-httping", "-dd", "-sp", "-o", os.path.abspath(output_csv)]
         
         print("开始运行CloudflareST-Rust测试...")
         # 在Linux上直接运行，不需要WSL
