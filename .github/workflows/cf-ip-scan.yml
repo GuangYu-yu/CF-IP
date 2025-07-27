@@ -2,7 +2,7 @@ name: CF反代IP扫描器
 
 on:
   schedule:
-    - cron: '0 0 * * 0'  # 每周运行一次
+#    - cron: '0 0 * * 0'  # 每周运行一次
   workflow_dispatch:  # 允许手动触发
 
 jobs:
