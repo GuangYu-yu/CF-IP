@@ -91,11 +91,11 @@ def download_cloudflarest_rust():
         print(f"下载或准备CloudflareST-Rust时出错: {e}")
         return None
 
-def run_cloudflarest_rust(cfst_path, ip_port_file, output_csv):
+def run_cloudflarest_rust(cfst_path, output_csv):
     """运行CloudflareST-Rust测试"""
     try:
         # 构建命令
-        cmd = [cfst_path, "-f", ip_port_file, "-httping", "-sp", "-o", output_csv]
+        cmd = [cfst_path, "-f", "ip_port_list.txt", "-httping", "-dd", "-sp", "-o", output_csv]
         
         print("开始运行CloudflareST-Rust测试...")
         # 在Linux上直接运行，不需要WSL
@@ -168,7 +168,7 @@ def main():
     # 步骤5: 运行CloudflareST-Rust测试
     print("步骤5: 运行CloudflareST-Rust测试...")
     result_csv = "result.csv"
-    if not run_cloudflarest_rust(cfst_path, ip_port_file, result_csv):
+    if not run_cloudflarest_rust(cfst_path, result_csv):
         print("CloudflareST-Rust测试失败，退出程序")
         return
     
