@@ -13,6 +13,17 @@ jobs:
     - name: 检出代码
       uses: actions/checkout@v3
 
+    - name: 检查必要secrets是否已设置
+      run: |
+        if [ "${{ secrets.PRIVATE_REPO_TOKEN }}" == "" ] || [ "${{ secrets.PRIVATE_REPO_NAME }}" == "" ]; then
+          echo "错误：未设置必要的secrets"
+          echo "请设置 PRIVATE_REPO_TOKEN 和 PRIVATE_REPO_NAME secrets"
+          echo "工作流退出"
+          exit 1
+        else
+          echo "已设置必要的secrets，继续执行"
+        fi
+
     - name: 设置Python环境
       uses: actions/setup-python@v4
       with:
