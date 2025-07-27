@@ -1,0 +1,54 @@
+name: CF反代IP扫描器
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'  # 每周运行一次
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v3
+
+    - name: 设置Python环境
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: 安装系统依赖
+      run: |
+        sudo apt update
+        # 安装 masscan
+        sudo apt install -y masscan
+        
+    - name: 安装Python依赖
+      run: |
+        pip install requests
+
+    - name: 运行一体化扫描器
+      run: |
+        python all-in-one.py
+
+#PRIVATE_REPO_TOKEN - GitHub个人访问令牌
+#PRIVATE_REPO_NAME - 私有仓库的名称
+
+    - name: 推送结果到私有仓库
+      run: |
+        # 配置Git
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        
+        # 克隆私有仓库
+        git clone https://x-access-token:${{ secrets.PRIVATE_REPO_TOKEN }}@github.com/${{ github.repository_owner }}/${{ secrets.PRIVATE_REPO_NAME }}.git
+        cd ${{ secrets.PRIVATE_REPO_NAME }}
+        
+        # 复制结果文件
+        cp ../final_ip_port.txt ./
+        
+        # 提交并推送
+        git add final_ip_port.txt
+        git commit -m "Update CF IP results $(date)" -a || echo "No changes to commit"
+        git push
