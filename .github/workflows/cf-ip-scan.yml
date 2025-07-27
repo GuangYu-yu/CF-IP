@@ -24,6 +24,10 @@ jobs:
         # 安装 masscan
         sudo apt install -y masscan
         
+    - name: 配置sudo权限以运行masscan
+      run: |
+        echo "ALL ALL=(ALL) NOPASSWD: /usr/bin/masscan" | sudo tee -a /etc/sudoers
+        
     - name: 安装Python依赖
       run: |
         pip install requests
