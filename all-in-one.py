@@ -37,8 +37,8 @@ def run_masscan(cidr_list, output_file):
         print("CIDR列表为空")
         return False
     
-    # 构建masscan命令
-    cmd = ["masscan", "-p0-65535"] + cidr_list + ["-oL", output_file, "--rate", "1000000"]
+    # 构建masscan命令，添加sudo
+    cmd = ["sudo", "masscan", "-p0-65535"] + cidr_list + ["-oL", output_file, "--rate", "1000000"]
     
     try:
         print("开始运行masscan...")
